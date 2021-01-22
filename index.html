@@ -1,0 +1,265 @@
+<html>
+<style>body { background-color: #000000; font-family: Arial; Color: white;}</style>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="utf-8">
+<meta name="theme-color" content="#031b26" />
+<meta name="robots" content="noindex">
+	<link rel="shortcut icon" type="image/png" href="https://www.highcharts.com/images/ico/favicon-16x16.png"/>
+	<link rel="shortcut icon" type="image/png" href="https://www.highcharts.com/images/ico/favicon-96x96.png"/>
+	<link rel="shortcut icon" type="image/png" href="https://www.highcharts.com/images/ico/favicon-32x32.png"/>
+	<link rel="shortcut icon" type="image/png" href="https://www.highcharts.com/images/ico/favicon-160x160.png"/>
+	<link rel="shortcut icon" type="image/png" href="https://www.highcharts.com/images/ico/favicon-192x192.png"/>
+<title>MySmartHome</title>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	var lastUpdtTime;
+	var d;
+	var alertDone = false;
+$(document).ready(function() {
+	getUpdates();
+	// check for new updates
+	setInterval('getUpdates()',60000);
+
+	setInterval('liveTimerUpdtFun()',1000);
+});
+
+function getUpdates() {
+	// get the data with a webservice call
+	$("#entry_id").css('color', '#f44b4b');
+
+	$.getJSON('https://api.thingspeak.com/channels/300978/feeds/last', function(data) {
+
+			// if the field1 has data update the page
+
+			d = new Date(data.created_at);
+
+	$("#created_at").html(d.toDateString() + " " + d.toLocaleTimeString()).css("fontSize", 15);
+	$("#entry_id").html(data.entry_id).css("fontSize", 15);
+
+		if (data.field1!=null){
+     $("#field1").html(data.field1).css("fontSize", 15);
+	}
+	else{
+	$("#field1").html("OFFLINE").css("fontSize", 15);	
+	}
+
+	if (data.field2!=null){
+     $("#field2").html(data.field2).css("fontSize", 15);
+	}
+	else{
+	$("#field2").html("OFFLINE").css("fontSize", 15);	
+	}
+
+		if (data.field3!=null){
+     $("#field3").html(data.field3).css("fontSize", 15);
+	}
+	else{
+	$("#field3").html("OFFLINE").css("fontSize", 15);	
+	}
+
+		if (data.field4!=null){
+     $("#field4").html(data.field4).css("fontSize", 15);
+	}
+	else{
+	$("#field4").html("OFFLINE").css("fontSize", 15);	
+	}
+
+		if (data.field5!=null){
+     $("#field5").html(data.field5).css("fontSize", 15);
+	}
+	else{
+	$("#field5").html("OFFLINE").css("fontSize", 15);	
+	}
+
+		if (data.field6!=null){
+     $("#field6").html(data.field6).css("fontSize", 15);
+	}
+	else{
+	$("#field6").html("OFFLINE").css("fontSize", 15);	
+	}
+
+		if (data.field7!=null){
+     $("#field7").html(data.field7).css("fontSize", 15);
+	}
+	else{
+	$("#field7").html("OFFLINE").css("fontSize", 15);	
+	}
+
+
+	$("#entry_id").css('color', 'white');
+
+
+
+lastUpdtTime = (new Date()).getTime();
+	}).fail(function() { 
+		$("#entry_id").html("Error while retrieving information!").css("fontSize", 15);
+		$("#entry_id").css('color', '#f44b4b');
+		});
+}
+
+function liveTimerUpdtFun() {
+	// drowser requst time past
+	if(lastUpdtTime!=null){
+	var timepass = ((new Date().getTime() - lastUpdtTime)/1000);
+	$("#UpdtIn").html("Last request: " + Math.round(timepass)+ " Sec ago").css("fontSize", 15);
+	$("#UpdtIn").css('color', '#40ef8c');
+
+     // data freshness warning
+     var Freshness = ((new Date().getTime()-d)/1000);
+	 if(alertDone==false && Freshness>4600){
+	 alert('The data '+ Math.round(Freshness) + ' Sec old. SmartHome is probably offline!');
+	 alertDone=true;
+	 }
+	 // data freshness info
+	 if(Freshness<=timepass){
+	 $("#IsDataFresh").html("Last data upload: less than 1 min ago").css("fontSize", 15);
+	 }else{
+     $("#IsDataFresh").html("Last data upload: " + Math.round(Freshness) + " Sec ago").css("fontSize", 15);
+	 }
+	 $("#IsDataFresh").css('color', '#40b7ef');
+	
+	}
+}
+</script>
+
+
+  <style>
+
+	  li{
+		margin: 10; 
+	  }
+
+	  #Title{
+
+		  padding: 20px;
+		  margin-bottom: -10px;
+		width: 850px;
+	  }
+	  
+  #data {
+    float: left;
+    clear: left;
+    width: 420px;
+    margin: 5px;
+	outline: none;
+
+	padding: 5px;
+	
+	
+}
+
+  #dataLive{
+   
+    width: 420px;
+    margin: 5px;
+	outline: none;
+
+	display: inline-block;
+
+	padding: 5px;
+	
+	
+	
+}
+
+    hr {
+      display: block;
+      height: 2px;
+      border: 0;
+      border-top: 4px solid #ad003a;
+
+      padding: 1;
+    }
+    
+    #MyButton {
+	background-color:#033f47;
+	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #000000;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	
+	text-decoration:none;
+
+    float: left;
+    clear: left;
+    width: 420px;
+  
+	margin-bottom: 10px;
+	outline: none;
+	padding: 5;
+
+}
+#MyButton:hover {
+	background-color:#014b7c;
+}
+#MyButton:active {
+	position:relative;
+	top:1px;
+}
+  </style>
+  
+  
+  <h1 id="Title" style="text-align:center;">= SmartHome Live Data =</h1>
+  
+
+  
+<body link="#ffffff" vlink="#ffffff" alink="#ffffff"> 
+	
+
+	<span id="data">
+	<hr >
+	<h3 align="center"> ThingSpeak Live Charts</h3>
+	<hr >
+
+
+<p><button id="MyButton" onclick="location.href='http://epro.droppages.com/pressure_and_temp.html'">Pressure and Temperature | chart</a></button></p>
+<p><button id="MyButton" onclick="location.href='http://epro.droppages.com/pressure.html'">Atm. pressure | chart</a></button></p>
+<p><button id="MyButton" onclick="location.href='http://epro.droppages.com/volt.html'"><a>AC Voltage | chart</a></button></p>
+<p><button id="MyButton" onclick="location.href='http://epro.droppages.com/temp.html'">Temperature (all sensors) | chart</a></button></p>
+<p><button id="MyButton" onclick="location.href='http://epro.droppages.com/humidity.html'"><a>Rel. Humidity | chart</a></button></p>
+<hr >
+<p><button id="MyButton" onclick="location.href='http://epro.droppages.com/berezan.html'"> Березань - МетеоІнфо</a></button></p>
+
+
+	<hr>
+
+
+	<div align="left">Ukraine, Berezan' </div>
+	<div  align="left">Creator: Serhii Bazavluk </div>
+	<div  align="left">* Automatically updates every 60 Seconds </div>
+	<div id="IsDataFresh" align="left"> </div>
+	<div id="UpdtIn" align="left"> </div>
+
+</span>
+
+
+
+	<span id="dataLive" >
+
+	<hr>
+	<h3  align="center"> ThingSpeak Live data (right now)</h3>
+   <hr>
+
+	<li> Inside: <span id="field1" > --- </span> °C </li>
+	<li> Outside: <span id="field2" > --- </span> °C </li>
+	<li> Attic: <span id="field3" > --- </span> °C </li>
+	<li> Basment: <span id="field4" > --- </span> °C </li>
+	<li> Heating: <span id="field5" > --- </span> °C </li>
+	<li> Humidity: <span id="field6" > --- </span> % </li>
+	<li> Atm. Pressure: <span id="field7" > --- </span> mmHg </li>
+	<li> Last value: <span id="created_at" > --- </span> </li>
+	<li> Update # <span id="entry_id" > --- </span> </li>
+	<hr >
+</span>
+
+ 
+</body>
+</html>
+
