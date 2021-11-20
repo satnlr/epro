@@ -14,8 +14,8 @@
 <meta charset="utf-8">
 <meta name="theme-color" content="#031b26" />
 
-<meta name="description" content="Ця сторінка показує яка температура та атмосферний тиск в м. Березань прямо зараз, інформація оновлюється кожні 60 секунд, також доступний графік.">
-<meta name="keywords" content="Температура , Місто березань, Атмосферний тиск, Березань, погода, зараз, сайт березані, датчик температури, онлайн термометр">
+<meta name="description" content="Ця сторінка показує яка частота та атмосферний тиск в м. Березань прямо зараз, інформація оновлюється кожні 60 секунд, також доступний графік.">
+<meta name="keywords" content="частота , Місто березань, Атмосферний тиск, Березань, погода, зараз, сайт березані, датчик температури, онлайн термометр">
 <meta name="author" content="Сергій Базавлук">
 
 	<link rel="shortcut icon" type="image/png" href="https://www.highcharts.com/images/ico/favicon-16x16.png"/>
@@ -24,7 +24,7 @@
 	<link rel="shortcut icon" type="image/png" href="https://www.highcharts.com/images/ico/favicon-160x160.png"/>
 	<link rel="shortcut icon" type="image/png" href="https://www.highcharts.com/images/ico/favicon-192x192.png"/>
 
-<title>Температура та тиск в місті Березань зараз | Онлайн Термометр | МетеоІнфо</title>
+<title>Частота електромережі</title>
     </head>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -88,7 +88,7 @@ $(document).ready(function() {
 
 	getUpdates();
 	// check for new updates
-	refreshIntervalId = setInterval('getUpdates()',60000);
+	refreshIntervalId = setInterval('getUpdates()',15000);
 
 	setInterval('liveTimerUpdtFun()',1000);
 
@@ -110,22 +110,22 @@ function loadAdditionalStuff() {
 
 
 
-	$.getJSON('https://api.thingspeak.com/channels/300978/fields/2?days=2', function(data) {
+	$.getJSON('https://api.thingspeak.com/channels/1577263/fields/1?days=2', function(data) {
 		
 			$.each(data.feeds, function(index,item) {
 				if (lowestTemp == null || highestTemp==null){
-					lowestTemp = parseFloat(item.field2);
-					highestTemp = parseFloat(item.field2);
+					lowestTemp = parseFloat(item.field1);
+					highestTemp = parseFloat(item.field1);
 					highestTempTime = new Date(item.created_at);
 					lowestTempTime = new Date(item.created_at);
 				}
         
-				if (parseFloat(item.field2)>=highestTemp){
-					highestTemp=parseFloat(item.field2);
+				if (parseFloat(item.field1)>=highestTemp){
+					highestTemp=parseFloat(item.field1);
 					highestTempTime = new Date(item.created_at);
 				}
-				if (parseFloat(item.field2)<=lowestTemp){
-					lowestTemp=parseFloat(item.field2);
+				if (parseFloat(item.field1)<=lowestTemp){
+					lowestTemp=parseFloat(item.field1);
 					lowestTempTime = new Date(item.created_at);
 				}
 				
@@ -134,41 +134,13 @@ function loadAdditionalStuff() {
     })
 
 
-	$.getJSON('https://api.sunrise-sunset.org/json?lat=50.3071&lng=31.4643&formatted=0', function(data) {
-	if(data.status=="OK"){
-
-		var sunrise = new Date(data.results.sunrise);
-		var sunset = new Date(data.results.sunset);
-		var sunInfoStr ="";
-
-		var optionsFormat = { 
-			hour: 'numeric',
-			minute: 'numeric',
-		   // second: 'numeric'
-		};
-
-        sunInfoStr += "Час сходу сонця: ";
-		sunInfoStr += sunrise.toLocaleString("uk", optionsFormat);
-		sunInfoStr += ", ";
-		sunInfoStr += "Час заходу сонця: ";
-		sunInfoStr += sunset.toLocaleString("uk", optionsFormat);
-		sunInfoStr += " <br> ";
-		sunInfoStr += "Тривалість дня в м. Березань: ";
-		sunInfoStr += secondsToHms(data.results.day_length);
-		sunInfoStr += " <hr>";
-		$("#sunInfo").html(sunInfoStr);	
-
-	}
-	})
-
-
 }
 
 function getUpdates() {
 	// get the data with a webservice call
 	$("#entry_id").css('color', '#f44b4b');
 
-	$.getJSON('https://api.thingspeak.com/channels/300978/feeds/last', function(data) {
+	$.getJSON('https://api.thingspeak.com/channels/1577263/feeds/last', function(data) {
 
 			// if the field1 has data update the page
 
@@ -178,36 +150,28 @@ function getUpdates() {
 
 	$("#created_at").html(d.toLocaleString("uk", options)).css("fontSize", 15);
 	$("#entry_id").html(data.entry_id).css("fontSize", 15);
-	if (data.field2!=null){
-     $("#field2").html(data.field2).css("fontSize", 15);
+	if (data.field1!=null){
+     $("#field1").html(data.field1).css("fontSize", 15);
 	}
 	else{
-	$("#field2").html("OFFLINE").css("fontSize", 15);	
-	}
-	if (data.field7!=null){
-	$("#field7").html(data.field7).css("fontSize", 15);
-	}
-	else{
-    $("#field7").html("OFFLINE").css("fontSize", 15);
+	$("#field1").html("OFFLINE").css("fontSize", 15);	
 	}
 	
 	$("#entry_id").css('color', 'white');
 
 	    // add color if success
-	$("#field2").css('color', '#40ef8c');
-	$("#field7").css('color', '#40ef8c');
-	$("#field2").css("fontSize", 20);
-	$("#field7").css("fontSize", 20);
+	$("#field1").css('color', '#40ef8c');
+	$("#field1").css("fontSize", 20);
 
 
 	// update highLow with the last value
     if(highestTemp!=null && lowestTemp!=null){
-	if (parseFloat(data.field2)>=highestTemp){
-		highestTemp=parseFloat(data.field2);
+	if (parseFloat(data.field1)>=highestTemp){
+		highestTemp=parseFloat(data.field1);
 		highestTempTime = new Date(data.created_at);
 		}
-	if (parseFloat(data.field2)<=lowestTemp){
-		lowestTemp=parseFloat(data.field2);
+	if (parseFloat(data.field1)<=lowestTemp){
+		lowestTemp=parseFloat(data.field1);
 		lowestTempTime = new Date(data.created_at);
 		}
 	}
@@ -457,34 +421,34 @@ a {
    
 	 <div id="dataLive">
 
-	  <h1 id="MyTitle" align="center">Березань - МетеоІнфо</h1>
-	  <h3  align="center">Температура та Тиск в м. Березань</h3>
+	  <h1 id="MyTitle" align="center">Ukraine Power Grid</h1>
+	  <h3  align="center">Main Frequency</h3>
       <hr>
 
-	  <li> Температура: <span id="field2" > -- </span> °C </li>
-	  <li> Атмосферний тиск: <span id="field7" > --- </span> мм.Рт.Ст </li>
+	  <li> Частота: <span id="field1" > -- </span> Hz </li>
 	  <li> Було виміряно: <span id="created_at" > --- </span> </li>
 	  <li> Номер вимірювання # <span id="entry_id" > Отримую дані, зачекай! </span> </li>
 
 	  <div id="highLowConteiner">
 			<hr>
-			<li> Найвища температура за 48 годин: <span id="highestTemp"> -- </span> °C </li>
+			<li> Найвища частота за 48 годин: <span id="highestTemp"> -- </span> Hz </li>
 			<li> Найвища була: <span id="highestTempTime"> -- </span></li>
-			<li> Найнища температура за 48 годин: <span id="lowestTemp"> -- </span> °C </li>
+			<li> Найнища частота за 48 годин: <span id="lowestTemp"> -- </span> Hz </li>
 			<li> Найнища була: <span id="lowestTempTime"> -- </span></li>
 	 </div>
 
-	  <p><button class="MyButton" onclick="location.href='https://electrical-pro.github.io/epro/pressure_and_tempUA.html'"> >> ГРАФІК Температури та тиску << </a></button></p>
+	  <p><button class="MyButton" onclick="location.href='https://electrical-pro.github.io/epro/frequency2.html'"> >> ГРАФІК Частоти << </a></button></p>
 	  <hr>
 	  
 
        <div id="IsDataFresh" align="left"> </div>
        <div id="UpdtIn" align="left"> </div>
-       <div  align="left">* Автоматично оновлюється кожні 60 Секунд </div>
+       <div  align="left">* Автоматично оновлюється кожні 15 Секунд </div>
 	   <hr>
 	   <div id="sunInfo"></div>
 	   <div id="clockInfo"></div>
-	   <p>(C) <a href="https://www.facebook.com/profile.php?id=100006495564819" align="left">Сергій Базавлук</a> 2018 | >> <a href="https://electrical-pro.github.io/epro/NationalGrid.html" align="left">ОЕС України </p> 
+
+	   <p>(C) <a href="https://www.facebook.com/profile.php?id=100006495564819" align="left">Сергій Базавлук</a> | 2021</p>
 
 	 </div>
 
