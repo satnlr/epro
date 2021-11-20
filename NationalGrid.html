@@ -14,8 +14,8 @@
 <meta charset="utf-8">
 <meta name="theme-color" content="#031b26" />
 
-<meta name="description" content="Ця сторінка показує яка частота та атмосферний тиск в м. Березань прямо зараз, інформація оновлюється кожні 60 секунд, також доступний графік.">
-<meta name="keywords" content="частота , Місто березань, Атмосферний тиск, Березань, погода, зараз, сайт березані, датчик температури, онлайн термометр">
+<meta name="description" content="Ця сторінка показує яка частота в енергосистемі україни">
+<meta name="keywords" content="частота , Місто березань, ОЕС України">
 <meta name="author" content="Сергій Базавлук">
 
 	<link rel="shortcut icon" type="image/png" href="https://www.highcharts.com/images/ico/favicon-16x16.png"/>
@@ -88,7 +88,7 @@ $(document).ready(function() {
 
 	getUpdates();
 	// check for new updates
-	refreshIntervalId = setInterval('getUpdates()',15000);
+	refreshIntervalId = setInterval('getUpdates()',16000);
 
 	setInterval('liveTimerUpdtFun()',1000);
 
@@ -212,10 +212,10 @@ function liveTimerUpdtFun() {
 	}
 
 	// smart schedule update, to get freshest data
-	if(Freshness>61.0 && Freshness<61.999){
+	if(Freshness>17.0 && Freshness<17.999){
 	console.log("Smart scheduled requst: ok");
 	clearInterval(refreshIntervalId);
-	refreshIntervalId = setInterval('getUpdates()',60000);
+	refreshIntervalId = setInterval('getUpdates()',16000);
 	getUpdates();
 	}
 
@@ -443,7 +443,7 @@ a {
 
        <div id="IsDataFresh" align="left"> </div>
        <div id="UpdtIn" align="left"> </div>
-       <div  align="left">* Автоматично оновлюється кожні 15 Секунд </div>
+       <div  align="left">* Автоматично оновлюється кожні 16 Секунд </div>
 	   <hr>
 	   <div id="sunInfo"></div>
 	   <div id="clockInfo"></div>
