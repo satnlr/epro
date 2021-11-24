@@ -482,15 +482,28 @@ rangeSelector: {
             title: {
                 text: 'Frequency (Hz)'
             },
-            id: 'T'
+            id: 'T',
+            plotLines: [
+    {
+            color: '#358EF6',
+            width: 2,
+            value: 49.95,
+    },
+    {
+            color: '#F70366',
+            width: 2,
+            value: 50.05,
+    }],
     }, {
     }],
-					    plotOptions: {          ////////////////////////////////////////////////HERE What I DID
+		plotOptions: {          ////////////////////////////////////////////////HERE What I DID
         series: {
-            threshold: 49.9,
-			fillOpacity: 0.3
+			      fillOpacity: 0.3,
+            threshold: 50,
+            negativeColor: '#F70366',
+            color: '#2B88F5',
         }
-    },                                      ////////////////////////////////////////////////////////////////
+    },                                  ////////////////////////////////////////////////////////////////
 		exporting: {
 		  enabled: true,
       csv: {
